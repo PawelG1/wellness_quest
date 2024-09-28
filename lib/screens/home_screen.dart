@@ -1,8 +1,10 @@
-// File: lib/screens/home_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wellness_quest/providers/user_provider.dart';
+import 'mindfulness_screen.dart';
+import 'fitness_activities_screen.dart'; // Nowy ekran
+import 'progress_dashboard.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -21,15 +23,6 @@ class HomeScreen extends StatelessWidget {
               Navigator.pushNamed(context, '/user_info');
             },
           ),
-          // Usuń przycisk wylogowania
-          // IconButton(
-          //   icon: Icon(Icons.logout),
-          //   onPressed: () {
-          //     // Wyloguj użytkownika
-          //     userProvider.clearUserData();
-          //     Navigator.pushReplacementNamed(context, '/user_info');
-          //   },
-          // ),
         ],
       ),
       body: Center(
@@ -46,9 +39,21 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/mindfulness');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MindfulnessScreen()),
+                );
               },
               child: Text('Aktywności mindfulness'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FitnessActivitiesScreen()),
+                );
+              },
+              child: Text('Aktywności fitness'),
             ),
             ElevatedButton(
               onPressed: () {

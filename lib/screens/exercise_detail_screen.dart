@@ -1,23 +1,22 @@
-// File: lib/screens/mindfulness_activity_screen.dart
+// File: lib/screens/exercise_detail_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/mindfulness_activity.dart';
+import '../models/exercise.dart';
 import '../providers/user_provider.dart';
 import '../models/user_progress.dart';
 import 'dart:async';
 
-class MindfulnessActivityScreen extends StatefulWidget {
-  final MindfulnessActivity activity;
+class ExerciseDetailScreen extends StatefulWidget {
+  final Exercise exercise;
 
-  MindfulnessActivityScreen({required this.activity});
+  ExerciseDetailScreen({required this.exercise});
 
   @override
-  _MindfulnessActivityScreenState createState() =>
-      _MindfulnessActivityScreenState();
+  _ExerciseDetailScreenState createState() => _ExerciseDetailScreenState();
 }
 
-class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
+class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   late Timer _timer;
   int _remainingTime = 0; // w sekundach
   bool _activityCompleted = false;
@@ -25,7 +24,8 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
   @override
   void initState() {
     super.initState();
-    _remainingTime = widget.activity.duration * 60;
+    // Ustaw czas trwania ćwiczenia - na przykład 5 minut
+    _remainingTime = widget.exercise.duration * 60;
     _startTimer();
   }
 
@@ -36,7 +36,7 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
         setState(() {
           _activityCompleted = true;
         });
-        _completeActivity();
+        _completeExercise();
       } else {
         setState(() {
           _remainingTime--;
@@ -45,20 +45,21 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
     });
   }
 
-  void _completeActivity() {
+  void _completeExercise() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (userProvider.user != null) {
       UserProgress progress = userProvider.user!.progress;
-      progress.mindfulnessPoints += widget.activity.points;
+      // Dodajemy punkty do odpowiedniej kategorii
+      progress.fitnessPoints += widget.exercise.points;
       userProvider.updateProgress(progress);
 
       // Pokaż potwierdzenie
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Aktywność ukończona'),
+          title: Text('Ćwiczenie ukończone'),
           content: Text(
-              'Gratulacje! Otrzymałeś ${widget.activity.points} punktów za ukończenie tej aktywności.'),
+              'Gratulacje! Otrzymałeś ${widget.exercise.points} punktów za wykonanie tego ćwiczenia.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -80,7 +81,7 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
     }
   }
 
-  void _cancelActivity() {
+  void _cancelExercise() {
     _timer.cancel();
     Navigator.pop(context);
   }
@@ -101,28 +102,33 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.activity.title),
+        title: Text(widget.exercise.name),
         actions: [
           IconButton(
             icon: Icon(Icons.cancel),
-            onPressed: _cancelActivity,
+            onPressed: _cancelExercise,
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _activityCompleted
-            ? Center(child: Text('Aktywność ukończona'))
+            ? Center(child: Text('Ćwiczenie ukończone'))
             : Column(
                 children: [
                   Icon(
-                    widget.activity.icon,
+                    widget.exercise.icon,
                     size: 100,
                   ),
                   SizedBox(height: 20),
                   Text(
-                    widget.activity.description,
+                    widget.exercise.description,
                     style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Zalety: ${widget.exercise.benefits}',
+                    style: TextStyle(fontStyle: FontStyle.italic),
                   ),
                   SizedBox(height: 20),
                   Text(
@@ -131,7 +137,7 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
                   ),
                   Spacer(),
                   ElevatedButton(
-                    onPressed: _completeActivity,
+                    onPressed: _completeExercise,
                     child: Text('Oznacz jako ukończone'),
                   ),
                 ],

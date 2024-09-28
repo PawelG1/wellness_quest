@@ -1,8 +1,10 @@
-// File: lib/models/wellness_plan.dart
+
+import 'fitness_activity.dart';
+import 'mental_health_activity.dart';
 
 class WellnessPlan {
-  List<String> fitnessActivities;
-  List<String> mentalHealthActivities;
+  List<FitnessActivity> fitnessActivities;
+  List<MentalHealthActivity> mentalHealthActivities;
   List<String> nutritionGuidelines;
 
   WellnessPlan({

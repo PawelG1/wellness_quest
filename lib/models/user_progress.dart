@@ -1,4 +1,3 @@
-// File: lib/models/user_progress.dart
 
 class UserProgress {
   int fitnessPoints;

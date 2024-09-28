@@ -1,4 +1,3 @@
-// File: lib/models/user.dart
 
 import 'user_preferences.dart';
 import 'user_progress.dart';

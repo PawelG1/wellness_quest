@@ -1,4 +1,3 @@
-// File: lib/screens/activity_screen.dart
 
 import 'package:flutter/material.dart';
 

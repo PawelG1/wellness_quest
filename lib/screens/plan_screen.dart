@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wellness_quest/models/wellness_plan.dart';
-import 'package:wellness_quest/providers/user_provider.dart';
-import 'package:wellness_quest/services/plan_generator.dart';
+import '../models/wellness_plan.dart';
+import '../models/fitness_activity.dart';
+import '../models/mental_health_activity.dart';
+import '../providers/user_provider.dart';
+import '../services/plan_generator.dart';
+import 'activity_details_screen.dart';
 
 class PlanScreen extends StatelessWidget {
   @override
@@ -15,10 +18,10 @@ class PlanScreen extends StatelessWidget {
     if (preferences == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Your Personalized Plan'),
+          title: Text('Twój Spersonalizowany Plan'),
         ),
         body: Center(
-          child: Text('No user preferences found.'),
+          child: Text('Brak danych preferencji użytkownika.'),
         ),
       );
     }
@@ -28,30 +31,56 @@ class PlanScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Personalized Plan'),
+        title: Text('Twój Spersonalizowany Plan'),
       ),
       body: ListView(
         padding: EdgeInsets.all(16.0),
         children: [
-          Text('Fitness Activities:',
+          Text('Aktywności Fitness:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ...plan.fitnessActivities.map((activity) => ListTile(
-                title: Text(activity),
-                onTap: () {
-                  Navigator.pushNamed(context, '/activity', arguments: activity);
-                },
+          ...plan.fitnessActivities.map((activity) => Card(
+                child: ListTile(
+                  leading: Icon(activity.icon, size: 40),
+                  title: Text(activity.title),
+                  subtitle: Text(activity.description),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActivityDetailsScreen(
+                          activityTitle: activity.title,
+                          exercises: activity.exercises,
+                          // Usuń parametr isFromPlan
+                        ),
+                      ),
+                    );
+                  },
+                ),
               )),
           SizedBox(height: 20),
-          Text('Mental Health Activities:',
+          Text('Aktywności dla Zdrowia Psychicznego:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          ...plan.mentalHealthActivities.map((activity) => ListTile(
-                title: Text(activity),
-                onTap: () {
-                  Navigator.pushNamed(context, '/activity', arguments: activity);
-                },
+          ...plan.mentalHealthActivities.map((activity) => Card(
+                child: ListTile(
+                  leading: Icon(activity.icon, size: 40),
+                  title: Text(activity.title),
+                  subtitle: Text(activity.description),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActivityDetailsScreen(
+                          activityTitle: activity.title,
+                          exercises: activity.exercises,
+                          // Usuń parametr isFromPlan
+                        ),
+                      ),
+                    );
+                  },
+                ),
               )),
           SizedBox(height: 20),
-          Text('Nutrition Guidelines:',
+          Text('Wytyczne Żywieniowe:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ...plan.nutritionGuidelines.map((guideline) => ListTile(
                 title: Text(guideline),
