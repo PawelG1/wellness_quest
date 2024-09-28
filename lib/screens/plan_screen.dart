@@ -21,7 +21,12 @@ class PlanScreen extends StatelessWidget {
           title: Text('Twój Spersonalizowany Plan'),
         ),
         body: Center(
-          child: Text('Brak danych preferencji użytkownika.'),
+          child: ElevatedButton(
+            onPressed: () => {
+              Navigator.pushNamed(context, '/user_info')
+            },
+            child: Text("Wprowadź dane do personalizacji"),
+          ),//Text('Brak danych preferencji użytkownika.'),
         ),
       );
     }

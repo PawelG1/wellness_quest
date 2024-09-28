@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Witaj, ${user?.name ?? 'Gościu'}!',
+              'Witaj, ${user?.name ?? ''}!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 30),
