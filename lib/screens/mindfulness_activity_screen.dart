@@ -20,12 +20,13 @@ class MindfulnessActivityScreen extends StatefulWidget {
 class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
   late Timer _timer;
   int _remainingTime = 0; // w sekundach
-  bool _activityCompleted = false;
+  bool _activityStarted = false; // Czy użytkownik rozpoczął aktywność
 
-  @override
-  void initState() {
-    super.initState();
-    _remainingTime = widget.activity.duration * 60;
+  void _startActivity() {
+    setState(() {
+      _activityStarted = true;
+      _remainingTime = widget.activity.duration * 60;
+    });
     _startTimer();
   }
 
@@ -33,9 +34,6 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingTime <= 0) {
         _timer.cancel();
-        setState(() {
-          _activityCompleted = true;
-        });
         _completeActivity();
       } else {
         setState(() {
@@ -81,7 +79,9 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
   }
 
   void _cancelActivity() {
-    _timer.cancel();
+    if (_activityStarted) {
+      _timer.cancel();
+    }
     Navigator.pop(context);
   }
 
@@ -93,7 +93,9 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_activityStarted) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -111,9 +113,8 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _activityCompleted
-            ? Center(child: Text('Aktywność ukończona'))
-            : Column(
+        child: !_activityStarted
+            ? Column(
                 children: [
                   Icon(
                     widget.activity.icon,
@@ -124,10 +125,23 @@ class _MindfulnessActivityScreenState extends State<MindfulnessActivityScreen> {
                     widget.activity.description,
                     style: TextStyle(fontSize: 18),
                   ),
+                  Spacer(),
+                  ElevatedButton(
+                    onPressed: _startActivity,
+                    child: Text('Rozpocznij aktywność'),
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  Text(
+                    'Czas pozostały: ${_formatTime(_remainingTime)}',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   SizedBox(height: 20),
                   Text(
-                    'Pozostały czas: ${_formatTime(_remainingTime)}',
-                    style: TextStyle(fontSize: 24),
+                    'Wykonuj aktywność...',
+                    style: TextStyle(fontSize: 18),
                   ),
                   Spacer(),
                   ElevatedButton(

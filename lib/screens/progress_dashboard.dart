@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wellness_quest/models/user_progress.dart';
-import 'package:wellness_quest/providers/user_provider.dart';
-import 'package:wellness_quest/widgets/progress_bar.dart';
+import '../models/user_progress.dart';
+import '../providers/user_provider.dart';
+import '../widgets/progress_bar.dart';
 
 class ProgressDashboard extends StatelessWidget {
   @override
@@ -33,14 +33,17 @@ class ProgressDashboard extends StatelessWidget {
             ProgressBar(
               label: 'Fitness',
               value: userProgress.fitnessPoints,
+              color: Colors.blue, // Dodano kolor
             ),
             ProgressBar(
               label: 'Mindfulness',
               value: userProgress.mindfulnessPoints,
+              color: Colors.purple, // Dodano kolor
             ),
             ProgressBar(
               label: 'Żywienie',
               value: userProgress.nutritionPoints,
+              color: Colors.orange, // Dodano kolor
             ),
           ],
         ),

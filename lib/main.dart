@@ -2,14 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wellness_quest/providers/user_provider.dart';
-import 'package:wellness_quest/screens/user_info_screen.dart';
-import 'package:wellness_quest/screens/onboarding_screen.dart';
-import 'package:wellness_quest/screens/home_screen.dart';
-import 'package:wellness_quest/screens/plan_screen.dart';
-import 'package:wellness_quest/screens/activity_screen.dart';
-import 'package:wellness_quest/screens/mindfulness_screen.dart';
-import 'package:wellness_quest/screens/progress_dashboard.dart';
+import 'providers/user_provider.dart';
+import 'screens/home_screen.dart';
+import 'screens/plan_screen.dart';
+import 'screens/progress_dashboard.dart';
+import 'screens/user_info_screen.dart';
 
 void main() {
   runApp(
@@ -23,53 +20,37 @@ void main() {
 class WellnessQuestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
-      builder: (context, userProvider, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Wellness Quest',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Wellness Quest',
+      theme: ThemeData(
+        primaryColor: Colors.green,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.green,
+          centerTitle: true,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, // Zmieniono z 'primary'
+            foregroundColor: Colors.white, // Zmieniono z 'onPrimary'
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
-          home: userProvider.user == null ? UserInfoScreen() : HomeScreen(),
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case '/user_info':
-                return MaterialPageRoute(
-                  builder: (context) => UserInfoScreen(),
-                );
-              case '/onboarding':
-                return MaterialPageRoute(
-                  builder: (context) => OnboardingScreen(),
-                );
-              case '/home':
-                return MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                );
-              case '/plan':
-                return MaterialPageRoute(
-                  builder: (context) => PlanScreen(),
-                );
-              case '/activity':
-                final String activityName = settings.arguments as String;
-                return MaterialPageRoute(
-                  builder: (context) => ActivityScreen(activityName: activityName),
-                );
-              case '/mindfulness':
-                return MaterialPageRoute(
-                  builder: (context) => MindfulnessScreen(),
-                );
-              case '/progress':
-                return MaterialPageRoute(
-                  builder: (context) => ProgressDashboard(),
-                );
-              default:
-                return MaterialPageRoute(
-                  builder: (context) => UserInfoScreen(),
-                );
-            }
-          },
-        );
+        ),
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.black), // Zmieniono z 'bodyText1'
+          bodyMedium: TextStyle(color: Colors.black), // Zmieniono z 'bodyText2'
+        ),
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/user_info': (context) => UserInfoScreen(),
+        '/plan': (context) => PlanScreen(),
+        '/progress': (context) => ProgressDashboard(),
       },
     );
   }

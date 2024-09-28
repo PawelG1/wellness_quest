@@ -50,7 +50,6 @@ class PlanScreen extends StatelessWidget {
                         builder: (context) => ActivityDetailsScreen(
                           activityTitle: activity.title,
                           exercises: activity.exercises,
-                          // Usuń parametr isFromPlan
                         ),
                       ),
                     );
@@ -72,7 +71,6 @@ class PlanScreen extends StatelessWidget {
                         builder: (context) => ActivityDetailsScreen(
                           activityTitle: activity.title,
                           exercises: activity.exercises,
-                          // Usuń parametr isFromPlan
                         ),
                       ),
                     );

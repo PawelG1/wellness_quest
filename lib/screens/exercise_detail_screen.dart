@@ -19,13 +19,13 @@ class ExerciseDetailScreen extends StatefulWidget {
 class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   late Timer _timer;
   int _remainingTime = 0; // w sekundach
-  bool _activityCompleted = false;
+  bool _activityStarted = false; // Czy użytkownik rozpoczął ćwiczenie
 
-  @override
-  void initState() {
-    super.initState();
-    // Ustaw czas trwania ćwiczenia - na przykład 5 minut
-    _remainingTime = widget.exercise.duration * 60;
+  void _startExercise() {
+    setState(() {
+      _activityStarted = true;
+      _remainingTime = widget.exercise.duration * 60;
+    });
     _startTimer();
   }
 
@@ -33,9 +33,6 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingTime <= 0) {
         _timer.cancel();
-        setState(() {
-          _activityCompleted = true;
-        });
         _completeExercise();
       } else {
         setState(() {
@@ -49,7 +46,6 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (userProvider.user != null) {
       UserProgress progress = userProvider.user!.progress;
-      // Dodajemy punkty do odpowiedniej kategorii
       progress.fitnessPoints += widget.exercise.points;
       userProvider.updateProgress(progress);
 
@@ -82,7 +78,9 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 
   void _cancelExercise() {
-    _timer.cancel();
+    if (_activityStarted) {
+      _timer.cancel();
+    }
     Navigator.pop(context);
   }
 
@@ -94,7 +92,9 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_activityStarted) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -112,9 +112,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _activityCompleted
-            ? Center(child: Text('Ćwiczenie ukończone'))
-            : Column(
+        child: !_activityStarted
+            ? Column(
                 children: [
                   Icon(
                     widget.exercise.icon,
@@ -130,10 +129,23 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     'Zalety: ${widget.exercise.benefits}',
                     style: TextStyle(fontStyle: FontStyle.italic),
                   ),
+                  Spacer(),
+                  ElevatedButton(
+                    onPressed: _startExercise,
+                    child: Text('Rozpocznij ćwiczenie'),
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  Text(
+                    'Czas pozostały: ${_formatTime(_remainingTime)}',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   SizedBox(height: 20),
                   Text(
-                    'Pozostały czas: ${_formatTime(_remainingTime)}',
-                    style: TextStyle(fontSize: 24),
+                    'Wykonuj ćwiczenie...',
+                    style: TextStyle(fontSize: 18),
                   ),
                   Spacer(),
                   ElevatedButton(
