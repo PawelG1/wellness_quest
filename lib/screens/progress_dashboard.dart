@@ -14,17 +14,17 @@ class ProgressDashboard extends StatelessWidget {
     if (userProgress == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Your Progress'),
+          title: Text('Twoje Postępy'),
         ),
         body: Center(
-          child: Text('No progress data available.'),
+          child: Text('Brak danych o postępach.'),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Progress'),
+        title: Text('Twoje Postępy'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -39,7 +39,7 @@ class ProgressDashboard extends StatelessWidget {
               value: userProgress.mindfulnessPoints,
             ),
             ProgressBar(
-              label: 'Nutrition',
+              label: 'Żywienie',
               value: userProgress.nutritionPoints,
             ),
           ],

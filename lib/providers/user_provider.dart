@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
 import '../models/user.dart';
+import '../models/user_progress.dart'; // Dodaj ten import
 
 class UserProvider extends ChangeNotifier {
   User? _user;
@@ -18,6 +20,14 @@ class UserProvider extends ChangeNotifier {
     _user = user;
     _saveUser();
     notifyListeners();
+  }
+
+  void updateProgress(UserProgress progress) {
+    if (_user != null) {
+      _user!.progress = progress;
+      _saveUser();
+      notifyListeners();
+    }
   }
 
   void _saveUser() async {

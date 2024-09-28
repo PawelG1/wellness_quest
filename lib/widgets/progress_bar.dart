@@ -13,12 +13,14 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double progress = (value % 100) / 100;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$label: $value Points'),
+        Text('$label: $value Punktów'),
         SizedBox(height: 5),
         LinearProgressIndicator(
-          value: (value % 100) / 100,
+          value: progress,
         ),
         SizedBox(height: 20),
       ],
