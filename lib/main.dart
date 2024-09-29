@@ -1,13 +1,11 @@
-// File: lib/main.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/hydration_provider.dart';
 import 'screens/home_screen.dart';
+import 'screens/user_info_screen.dart';
 import 'screens/plan_screen.dart';
 import 'screens/progress_dashboard.dart';
-import 'screens/user_info_screen.dart';
 import 'screens/hydration_screen.dart';
 
 void main() {
@@ -32,7 +30,6 @@ class WellnessQuestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Wellness Quest',
       theme: ThemeData(
         primaryColor: Colors.green,
@@ -43,8 +40,8 @@ class WellnessQuestApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green, // Zmieniono z 'primary'
-            foregroundColor: Colors.white, // Zmieniono z 'onPrimary'
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -52,14 +49,13 @@ class WellnessQuestApp extends StatelessWidget {
           ),
         ),
         textTheme: TextTheme(
-          bodyLarge: TextStyle(color: Colors.black), // Zmieniono z 'bodyText1'
-          bodyMedium: TextStyle(color: Colors.black), // Zmieniono z 'bodyText2'
+          bodyLarge: TextStyle(color: Colors.black),
+          bodyMedium: TextStyle(color: Colors.black),
         ),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(),
-        '/home': (context) => HomeScreen(),
         '/user_info': (context) => UserInfoScreen(),
         '/plan': (context) => PlanScreen(),
         '/progress': (context) => ProgressDashboard(),

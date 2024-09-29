@@ -1,5 +1,3 @@
-// File: lib/screens/user_info_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wellness_quest/models/user.dart';
@@ -22,6 +20,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   void _submitUserInfo() {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      debugPrint('Formularz został zapisany.');
+
       UserPreferences preferences = UserPreferences(
         fitnessGoals: _selectedFitnessGoals,
         mentalHealthGoals: _selectedMentalHealthGoals,
@@ -35,9 +36,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       );
 
       Provider.of<UserProvider>(context, listen: false).setUser(user);
+      debugPrint('Użytkownik został ustawiony: ${user.name}');
 
       // Przejdź do ekranu głównego
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/'); // lub '/home' jeśli dodałeś tę trasę
+    } else {
+      debugPrint('Formularz zawiera błędy.');
     }
   }
 
@@ -87,19 +91,33 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     },
                   ),
                 ),
-                _buildCheckboxList('Wybierz swoje cele fitness', FITNESS_GOALS, _selectedFitnessGoals),
-                _buildCheckboxList('Wybierz swoje cele dotyczące zdrowia psychicznego',
-                    MENTAL_HEALTH_GOALS, _selectedMentalHealthGoals),
+                _buildCheckboxList(
+                    'Wybierz swoje cele fitness',
+                    FITNESS_GOALS,
+                    _selectedFitnessGoals),
+                _buildCheckboxList(
+                    'Wybierz swoje cele dotyczące zdrowia psychicznego',
+                    MENTAL_HEALTH_GOALS,
+                    _selectedMentalHealthGoals),
                 _buildCheckboxList('Wybierz ograniczenia dietetyczne',
                     DIETARY_RESTRICTIONS, _dietaryRestrictions),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _submitUserInfo,
                   child: Text('Zapisz i kontynuuj'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 60),
+                  ),
                 ),
               ],
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 }

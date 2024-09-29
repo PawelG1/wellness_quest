@@ -1,11 +1,6 @@
-// File: lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
-import '../models/user.dart';
-import '../models/user_preferences.dart';
-import '../models/user_progress.dart';
 import 'mindfulness_screen.dart';
 import 'fitness_activities_screen.dart';
 import 'progress_dashboard.dart';
@@ -27,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (userProvider.user == null) {
         // Przekieruj użytkownika do ekranu /user_info po zakończeniu budowania widgetów
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(context, '/user_info');
+          Navigator.pushReplacementNamed(context, '/user_info'); // lub '/home' jeśli dodałeś tę trasę
         });
       }
       _isInitialized = true;
@@ -39,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
 
-    // Jeśli użytkownik jest nadal null, nie renderuj interfejsu głównego
+    // Jeśli użytkownik jest nadal null, wyświetl wskaźnik ładowania
     if (user == null) {
       return Scaffold(
         body: Center(
@@ -107,7 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MindfulnessScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => MindfulnessScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -128,7 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => FitnessActivitiesScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => FitnessActivitiesScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -180,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       minimumSize: Size(double.infinity, 60),
                     ),
                     child: Text(
-                      'Nawadnianie i Odżywianie',
+                      'Nawadnianie',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),

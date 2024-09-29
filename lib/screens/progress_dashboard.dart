@@ -41,8 +41,8 @@ class ProgressDashboard extends StatelessWidget {
               color: Colors.purple, // Dodano kolor
             ),
             ProgressBar(
-              label: 'Żywienie',
-              value: userProgress.nutritionPoints,
+              label: 'Nawodnienie',
+              value: userProgress.hydrationPoints,
               color: Colors.orange, // Dodano kolor
             ),
           ],
