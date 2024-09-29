@@ -3,15 +3,50 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
+import '../models/user.dart';
+import '../models/user_preferences.dart';
+import '../models/user_progress.dart';
 import 'mindfulness_screen.dart';
 import 'fitness_activities_screen.dart';
 import 'progress_dashboard.dart';
+import 'hydration_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _isInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      if (userProvider.user == null) {
+        // Przekieruj użytkownika do ekranu /user_info po zakończeniu budowania widgetów
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacementNamed(context, '/user_info');
+        });
+      }
+      _isInitialized = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
+
+    // Jeśli użytkownik jest nadal null, nie renderuj interfejsu głównego
+    if (user == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +73,7 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Witaj, ${user?.name ?? ''}!',
+              'Witaj, ${user.name}!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 30),
@@ -125,6 +160,27 @@ class HomeScreen extends StatelessWidget {
                     ),
                     child: Text(
                       'Zobacz postępy',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  // Dodajemy nowy przycisk dla Nawadniania i Odżywiania
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/hydration');
+                      // Lub jeśli używasz bezpośredniej nawigacji:
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => HydrationScreen()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      minimumSize: Size(double.infinity, 60),
+                    ),
+                    child: Text(
+                      'Nawadnianie i Odżywianie',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),

@@ -1,3 +1,4 @@
+// File: lib/models/user_preferences.dart
 
 class UserPreferences {
   List<String> fitnessGoals;

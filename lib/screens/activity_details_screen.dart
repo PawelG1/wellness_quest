@@ -26,8 +26,8 @@ class ActivityDetailsScreen extends StatelessWidget {
           return Card(
             child: ListTile(
               leading: Icon(exercise.icon, size: 40),
-              title: Text(exercise.name),
-              subtitle: Text(exercise.description),
+              title: Text(exercise.name), // Upewnij się, że 'name' jest po polsku
+              subtitle: Text(exercise.description), // Upewnij się, że 'description' jest po polsku
               onTap: () {
                 Navigator.push(
                   context,
